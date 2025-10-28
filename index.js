@@ -29,13 +29,20 @@ const url = require('url');
 
 ///////////////////////
 //SERVER
+ const data = fs.readFileSync(`${__dirname}/dev-data/data.json`,  'utf8');
+ const dataObj= JSON.parse(data);
+
+
 const server = http.createServer((req, res) => {
     const pathName = req.url;
 
-    if(pathName === '/' || pathName === '/overview') {
+    if (pathName === '/' || pathName === '/overview') {
         res.end('This is an overview page');
     } else if (pathName === '/product') {
         res.end('This is an product page');
+    } else if (pathName === '/api') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(data);
     } else {
         res.writeHead(404, {
             'Content-Type': 'text/html; charset=utf-8',
@@ -43,8 +50,6 @@ const server = http.createServer((req, res) => {
         });
         res.end('<h1>Page Not Found</h1>');
     }
-
-    res.end('Hello from the server!');
-})
+});
 
 server.listen(8000, '127.0.0.1', () => { console.log('Server is running!'); })
